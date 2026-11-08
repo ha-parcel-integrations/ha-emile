@@ -122,10 +122,15 @@ def _collapse(text: str) -> str:
     return text
 
 
+# Both word orders occur for the same notification row ("EMAIL REMINDER SENT",
+# "REMINDER EMAIL SENT FAILED").
+_REMINDER_PREFIXES = ("EMAIL REMINDER", "REMINDER EMAIL")
+
+
 def _is_statusless(wording: str) -> bool:
     """Reminder mails and billing rows say nothing about the parcel's state."""
     upper = wording.upper()
-    return upper.startswith("EMAIL REMINDER") or upper.endswith("_FEE")
+    return upper.startswith(_REMINDER_PREFIXES) or upper.endswith("_FEE")
 
 
 # Status codes we have already warned about, so each unmapped one is logged

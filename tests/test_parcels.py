@@ -73,7 +73,14 @@ def test_wording_with_the_waybill_reference_is_matched_by_prefix_only():
 
 
 @pytest.mark.parametrize(
-    "wording", ["EMAIL REMINDER SENT", "EMAIL REMINDER FAILED", "STORAGE_FEE", ""]
+    "wording",
+    [
+        "EMAIL REMINDER SENT",
+        "EMAIL REMINDER FAILED",
+        "REMINDER EMAIL SENT FAILED",
+        "STORAGE_FEE",
+        "",
+    ],
 )
 def test_statusless_rows_map_to_none_without_a_warning(wording, caplog):
     with caplog.at_level(logging.WARNING):

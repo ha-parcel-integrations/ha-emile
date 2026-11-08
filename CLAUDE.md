@@ -60,9 +60,9 @@ you act in one of these areas:
   (the not-found reply already spells it differently).
 - **Status comes from rows, not a field.** The newest mappable row decides
   (rows are ordered by their aware instant, wire order on ties). `EMAIL
-  REMINDER ...` and `*_FEE` rows carry no status and are skipped silently;
-  unmapped wording is skipped with a one-shot WARNING and the search falls
-  through. The map follows the wordings on the carrier's own tracking page;
+  REMINDER ...` / `REMINDER EMAIL ...` and `*_FEE` rows carry no status and
+  are skipped silently; unmapped wording is skipped with a one-shot WARNING
+  and the search falls through. The map follows the wordings on the carrier's own tracking page;
   customs, hold, return and exception rows are not yet seen on a real parcel.
 - **`delivered` is sticky.** A later row only overturns it when it maps to
   `out_for_delivery`, `returning` or `problem`. Delivered codes also leave the
