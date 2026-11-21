@@ -38,10 +38,11 @@ you act in one of these areas:
 - **Events and `_known_state` are built from the unfiltered delivered list.**
   The "keep N days / N parcels" option only trims `coordinator.delivered`; a
   parcel it leaves out must still fire `_parcel_delivered`.
-- **The optional pickup-point summaries are a pair.** A carrier that can tell
-  a parcel is destined for a pickup point exposes
-  `en_route_to_pickup_point` for `pickup is true` before it arrives; one that
-  can reach `ParcelStatus.AT_PICKUP_POINT` also exposes `awaiting_pickup`.
+- **The pickup-point summaries are a pair.** A carrier that can deliver to a
+  pickup point or locker exposes both `en_route_to_pickup_point` and
+  `awaiting_pickup`, even before a real parcel has shown the status or flag
+  (they read 0 until then; record it in `PENDING_*`). A carrier without pickup
+  points exposes neither and keeps `pickup` constantly False.
   See *Parcel contract* in `CONVENTIONS.md`. Say "pickup point", not
   "ServicePoint"/"parcel shop"/"locker", for the generic concept; the
   example carrier demonstrates both canonical sensors.
@@ -79,7 +80,11 @@ you act in one of these areas:
   and dimensions are not in the payload. `url` is built from the tracking code.
   `CAPABILITIES` is `url` and `history`.
 - **No pickup-point sensors:** the carrier has no pickup-point state, so
-  `pickup` is always `False`.
+  `pickup` is always `False`, `pickup_point` is `None` and `planned_from`/
+  `planned_to` stay `None`; neither pickup sensor exists.
+- **`RETURNED TO SENDER` stays `returning`, not `delivered`.** The row may be an
+  intermediate scan, and no real return has shown that it means back at the
+  sender.
 - **No outgoing parcels:** an inbound last-mile network with no consumer-sending
   surface.
 - **Privacy.** `raw` keeps the complete parsed reply; `remark`, `phone_number`,
