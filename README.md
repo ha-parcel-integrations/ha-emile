@@ -38,6 +38,7 @@ A custom Home Assistant integration that tracks your [eMile](https://www.emileps
 - Summary sensors: incoming parcels, next delivery, recently delivered parcels
 - Read-only **Deliveries** calendar (stays empty: eMile publishes no delivery window)
 - `emile.track_parcel` / `emile.untrack_parcel` services, so a dashboard button can add a parcel
+- A `contents` field on every parcel, set in your own words with the `emile.update_contents` service or the `contents` field of `emile.track_parcel`; it titles the calendar event and shows on the next-delivery sensor
 - Events + device triggers for no-code automations (parcel registered, status changed, delivered)
 - Opt-in per-parcel status history
 - Manual refresh button and a diagnostic last-update sensor
@@ -155,8 +156,11 @@ Every payload is the full normalised parcel plus the hub's `device_id`. Events a
 
 | Service | Fields | Description |
 |---|---|---|
-| `emile.track_parcel` | `tracking_code` | Start tracking a parcel |
+| `emile.track_parcel` | `tracking_code`, `contents` (optional) | Start tracking a parcel |
 | `emile.untrack_parcel` | `tracking_code` | Stop tracking a parcel |
+| `emile.update_contents` | `tracking_code`, `contents` (optional) | Set, replace or clear (empty text) a note on what is in a parcel, tracked or not |
+
+The `contents` text is stored locally, never sent to eMile, and fills the parcel's `contents` field; it titles the parcel's calendar event and shows on the next-delivery sensor.
 
 ## Examples
 

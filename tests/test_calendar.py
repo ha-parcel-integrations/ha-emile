@@ -106,3 +106,21 @@ async def test_get_events_filters_by_range():
     end = datetime(2100, 1, 1, tzinfo=UTC)
     events = await cal.async_get_events(MagicMock(), start, end)
     assert {e.uid for e in events} == {"FUTURE"}
+
+
+def test_event_title_prefers_contents_over_sender():
+    parcel = _parcel("A", planned_from="2099-01-01T10:00:00Z")
+    parcel["contents"] = "Running shoes"
+    assert _cal([parcel])._events()[0].summary == "Running shoes"
+
+
+def test_event_title_falls_back_to_the_sender_without_contents():
+    parcel = _parcel("A", planned_from="2099-01-01T10:00:00Z")
+    parcel["contents"] = None
+    assert _cal([parcel])._events()[0].summary == "Example Sender"
+
+
+def test_event_title_falls_back_to_the_barcode_without_contents_or_sender():
+    parcel = _parcel("A", planned_from="2099-01-01T10:00:00Z")
+    parcel["sender"] = None
+    assert _cal([parcel])._events()[0].summary == "Parcel A"

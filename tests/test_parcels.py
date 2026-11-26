@@ -329,6 +329,7 @@ CANONICAL_KEYS = [
     "barcode",
     "sender",
     "receiver",
+    "contents",
     "status",
     "raw_status",
     "delivered",
@@ -458,7 +459,7 @@ def test_waybill_reference_never_reaches_raw_status():
 
 
 def test_capabilities_are_known_values():
-    assert CAPABILITIES <= KNOWN_CAPABILITIES
+    assert KNOWN_CAPABILITIES - {"contents"} >= CAPABILITIES
     assert PENDING_CAPABILITIES <= KNOWN_CAPABILITIES
 
 
@@ -469,7 +470,7 @@ def test_a_capability_is_never_both_populated_and_pending():
 def test_capabilities_match_what_normalize_parcel_actually_returns():
     delivered = normalize_parcel(delivered_sample())
     with_history = normalize_parcel(delivered_sample(), include_history=True)
-    absent = KNOWN_CAPABILITIES - CAPABILITIES - PENDING_CAPABILITIES
+    absent = KNOWN_CAPABILITIES - {"contents"} - CAPABILITIES - PENDING_CAPABILITIES
     assert "history" in CAPABILITIES
     assert with_history["history"]
     for field in ("weight", "dimensions", "pickup_point", "url"):
